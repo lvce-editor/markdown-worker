@@ -3,9 +3,6 @@ import * as config from '@lvce-editor/eslint-config'
 export default [
   ...config.default,
   {
-    ignores: ['packages/extension-detail-view-worker/src/extensionDetailViewWorkerMain.ts'],
-  },
-  {
     files: ['**/*.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
