@@ -9,24 +9,15 @@ const sharedProcessUrl = pathToFileURL(sharedProcessPath).toString()
 
 const sharedProcess = await import(sharedProcessUrl)
 
-process.env.PATH_PREFIX = '/extension-detail-view'
+process.env.PATH_PREFIX = '/markdown-worker'
 const { commitHash } = await sharedProcess.exportStatic({
   root,
   extensionPath: '',
 })
 
 await cp(
-  join(root, '.tmp', 'dist', 'dist', 'extensionDetailViewWorkerMain.js'),
-  join(root, 'dist', commitHash, 'packages', 'extension-detail-view-worker', 'dist', 'extensionDetailViewWorkerMain.js'),
-)
-
-const nodeModulesPath = join(root, 'packages', 'server', 'node_modules')
-
-const serverStaticPath = join(nodeModulesPath, '@lvce-editor', 'static-server', 'static')
-
-await cp(
-  join(serverStaticPath, commitHash, 'packages', 'renderer-worker', 'dist', 'rendererWorkerMain.js.original'),
-  join(root, 'dist', commitHash, 'packages', 'renderer-worker', 'dist', 'rendererWorkerMain.js'),
+  join(root, '.tmp', 'dist', 'dist', 'markdownWorkerMain.js'),
+  join(root, 'dist', commitHash, 'packages', 'markdown-worker', 'dist', 'markdownWorkerMain.js'),
 )
 
 await cp(join(root, 'dist'), join(root, '.tmp', 'static'), { recursive: true })
