@@ -1,5 +1,5 @@
 {
-  "name": "@lvce-editor/extension-detail-view-memory",
+  "name": "@lvce-editor/markdown-worker-memory",
   "version": "0.0.0-dev",
   "type": "module",
   "scripts": {
