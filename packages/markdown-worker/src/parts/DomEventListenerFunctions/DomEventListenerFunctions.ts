@@ -1,6 +1,1 @@
-const HandleClickDisable = 'handleClickDisable'
-const HandleClickSize = 'handleClickSize'
-const HandleClickUninstall = 'handleClickUninstall'
-const HandleFeaturesClick = 'handleFeaturesClick'
 export const HandleReadmeContextMenu = 'handleReadmeContextMenu'
-const HandleTabsClick = 'handleTabsClick'
