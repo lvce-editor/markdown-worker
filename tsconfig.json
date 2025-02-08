@@ -3,7 +3,7 @@
   "include": [],
   "references": [
     {
-      "path": "./packages/extension-detail-view-worker"
+      "path": "./packages/markdown-worker"
     },
     {
       "path": "./packages/build"
@@ -13,12 +13,6 @@
     },
     {
       "path": "./packages/e2e"
-    },
-    {
-      "path": "./packages/test-integration"
-    },
-    {
-      "path": "./packages/test-integration-util"
     },
     {
       "path": "./packages/memory"
