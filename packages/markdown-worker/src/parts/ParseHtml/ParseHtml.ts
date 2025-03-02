@@ -11,13 +11,13 @@ export const parseHtml = (html: string, allowedAttributes: readonly string[]): r
   Assert.string(html)
   Assert.array(allowedAttributes)
   const tokens = TokenizeHtml.tokenizeHtml(html)
-  const dom = []
-  const root = {
+  const dom: VirtualDomNode[] = []
+  const root: VirtualDomNode = {
     type: 0,
     childCount: 0,
   }
   let current: any = root
-  const stack = [root]
+  const stack: VirtualDomNode[] = [root]
   let attributeName = ''
   for (const token of tokens) {
     switch (token.type) {
