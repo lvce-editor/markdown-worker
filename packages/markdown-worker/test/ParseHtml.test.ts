@@ -166,3 +166,32 @@ test('text with angle bracket', () => {
     text('>'),
   ])
 })
+
+test('closing tag updates current element correctly', () => {
+  const html = '<div><p>text</p><span>more</span></div>'
+  const allowedAttributes: readonly string[] = []
+  expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
+    {
+      type: VirtualDomElements.Div,
+      childCount: 2,
+    },
+    {
+      type: VirtualDomElements.P,
+      childCount: 1,
+    },
+    {
+      text: 'text',
+      type: 12,
+      childCount: 0,
+    },
+    {
+      type: VirtualDomElements.Span,
+      childCount: 1,
+    },
+    {
+      text: 'more',
+      type: 12,
+      childCount: 0,
+    },
+  ])
+})
