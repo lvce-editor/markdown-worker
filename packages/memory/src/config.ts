@@ -3,7 +3,7 @@ import { root } from './root.ts'
 
 export const threshold = 520_000
 
-export const instantiations = 1000
+export const instantiations = 900
 
 export const instantiationsPath = join(root, 'packages', 'markdown-worker')
 
