@@ -16,7 +16,7 @@ test('listen - creates rpc client and sets it in registry', async () => {
   mockCreate.mockResolvedValue(mockRpc)
 
   const { listen } = await import('../src/parts/Listen/Listen.ts')
-  const RpcRegistry = await import('../src/parts/RpcRegistry/RpcRegistry.ts')
+  const RpcRegistry = await import('@lvce-editor/rpc-registry')
   const RpcId = await import('../src/parts/RpcId/RpcId.ts')
 
   await listen()
