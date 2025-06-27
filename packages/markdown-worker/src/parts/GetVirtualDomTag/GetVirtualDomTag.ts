@@ -1,5 +1,5 @@
+import { VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import * as ElementTags from '../ElementTags/ElementTags.ts'
-import * as VirtualDomElements from '../VirtualDomElements/VirtualDomElements.ts'
 
 export const getVirtualDomTag = (text: string): number => {
   switch (text) {
