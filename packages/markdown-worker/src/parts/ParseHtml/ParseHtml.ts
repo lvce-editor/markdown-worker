@@ -1,11 +1,11 @@
-import type { VirtualDomNode } from '../VirtualDomNode/VirtualDomNode.ts'
+import type { VirtualDomNode} from '@lvce-editor/virtual-dom-worker';
+import { text } from '@lvce-editor/virtual-dom-worker'
 import * as Assert from '../Assert/Assert.ts'
 import * as GetVirtualDomTag from '../GetVirtualDomTag/GetVirtualDomTag.ts'
 import * as HtmlTokenType from '../HtmlTokenType/HtmlTokenType.ts'
 import * as IsSelfClosingTag from '../IsSelfClosingTag/IsSelfClosingTag.ts'
 import * as ParseText from '../ParseText/ParseText.ts'
 import * as TokenizeHtml from '../TokenizeHtml/TokenizeHtml.ts'
-import { text } from '../VirtualDomHelpers/VirtualDomHelpers.ts'
 
 export const parseHtml = (html: string, allowedAttributes: readonly string[]): readonly VirtualDomNode[] => {
   Assert.string(html)
