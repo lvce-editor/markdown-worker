@@ -195,3 +195,23 @@ test('closing tag updates current element correctly', () => {
     },
   ])
 })
+
+test('duplicate closing tag ', () => {
+  const html = '<div><p>text</p></p></p></div>'
+  const allowedAttributes: readonly string[] = []
+  expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
+    {
+      type: VirtualDomElements.Div,
+      childCount: 1,
+    },
+    {
+      type: VirtualDomElements.P,
+      childCount: 1,
+    },
+    {
+      text: 'text',
+      type: 12,
+      childCount: 0,
+    },
+  ])
+})
