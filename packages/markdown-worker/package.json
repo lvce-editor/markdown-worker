@@ -50,6 +50,7 @@
     "@lvce-editor/assert": "^1.4.0",
     "@lvce-editor/rpc": "^4.7.0",
     "@lvce-editor/rpc-registry": "^2.49.0",
+    "@lvce-editor/viewlet-registry": "^1.2.0",
     "@lvce-editor/virtual-dom-worker": "^2.7.0",
     "jest": "^30.0.4",
     "marked": "^16.0.0",

@@ -1,11 +1,11 @@
+import { terminate } from '@lvce-editor/viewlet-registry'
 import * as GetMarkdownVirtualDom from '../GetMarkdownVirtualDom/GetMarkdownVirtualDom.ts'
 import * as RenderMarkdown from '../RenderMarkdown/RenderMarkdown.ts'
-import * as Terminate from '../Terminate/Terminate.ts'
 
 export const commandMap = {
   'Markdown.getVirtualDom': GetMarkdownVirtualDom.getMarkdownVirtualDom,
   'Markdown.render': RenderMarkdown.renderMarkdown,
-  'Markdown.terminate': Terminate.terminate,
+  'Markdown.terminate': terminate,
 
   // deprecated
   'Markdown.renderMarkdown': RenderMarkdown.renderMarkdown,
