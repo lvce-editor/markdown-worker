@@ -46,14 +46,14 @@
     ]
   },
   "devDependencies": {
-    "@jest/globals": "^30.0.4",
+    "@jest/globals": "^30.0.5",
     "@lvce-editor/assert": "^1.4.0",
     "@lvce-editor/rpc": "^4.11.0",
-    "@lvce-editor/rpc-registry": "^2.54.0",
-    "@lvce-editor/viewlet-registry": "^1.2.0",
-    "@lvce-editor/virtual-dom-worker": "^2.11.0",
-    "jest": "^30.0.4",
-    "marked": "^16.0.0",
+    "@lvce-editor/rpc-registry": "^2.65.0",
+    "@lvce-editor/viewlet-registry": "^1.4.0",
+    "@lvce-editor/virtual-dom-worker": "^2.15.0",
+    "jest": "^30.0.5",
+    "marked": "^16.1.1",
     "ts-jest": "^29.4.0"
   }
 }
