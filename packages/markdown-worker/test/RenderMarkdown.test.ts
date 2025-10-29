@@ -17,6 +17,19 @@ test('link', async () => {
   expect(await RenderMarkdown.renderMarkdown('[test](https://example.com)')).toBe('<p><a href="https://example.com">test</a></p>\n')
 })
 
+test('link - external', async () => {
+  // @ts-ignore
+  globalThis.location = {
+    protocol: 'http:',
+    hostname: 'localhost',
+  }
+  expect(
+    await RenderMarkdown.renderMarkdown('[test](https://example.com)', {
+      linksExternal: true,
+    }),
+  ).toBe('<p><a target="_blank" rel="noreferrer noopener nofollow" href="https://example.com">test</a></p>\n')
+})
+
 test('code block', async () => {
   expect(await RenderMarkdown.renderMarkdown('```\ncode\n```')).toBe('<pre><code>code\n</code></pre>\n')
 })
