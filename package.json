@@ -8,7 +8,7 @@
   "scripts": {
     "build": "node packages/build/src/build.js",
     "build:static": "node packages/build/src/build-static.js",
-    "build:watch": "./packages/build/node_modules/.bin/esbuild --format=esm --bundle --external:node:buffer --external:electron --external:ws --external:node:worker_threads --watch packages/markdown-worker/src/markdownWorkerMain.ts --outfile=.tmp/dist/dist/extensionDetailViewWorkerMain.js",
+    "build:watch": "./packages/build/node_modules/.bin/esbuild --format=esm --bundle --external:node:buffer --external:electron --external:ws --external:node:worker_threads --watch packages/markdown-worker/src/markdownWorkerMain.ts --outfile=.tmp/dist/dist/markdownWorkerMain.js",
     "dev": "node packages/build/src/dev.js",
     "format": "prettier --write .",
     "postinstall": "lerna bootstrap --ci",
