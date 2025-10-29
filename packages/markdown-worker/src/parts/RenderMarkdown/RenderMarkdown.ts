@@ -6,6 +6,8 @@ export interface MarkDownOptions {
   readonly linksExternal?: boolean
 }
 
+const RE_LINK_START = /^<a /
+
 export const renderMarkdown = async (markdown: string, options: MarkDownOptions = {}): Promise<string> => {
   const renderer = new marked.Renderer()
   if (options.linksExternal) {
@@ -13,7 +15,7 @@ export const renderMarkdown = async (markdown: string, options: MarkDownOptions 
     renderer.link = (link): string => {
       const localLink = link.href.startsWith(`${location.protocol}//${location.hostname}`)
       const html = linkRenderer(link)
-      return localLink ? html : html.replace(/^<a /, `<a target="_blank" rel="noreferrer noopener nofollow" `)
+      return localLink ? html : html.replace(RE_LINK_START, `<a target="_blank" rel="noreferrer noopener nofollow" `)
     }
   }
   const html = await marked.marked(markdown, { renderer })
