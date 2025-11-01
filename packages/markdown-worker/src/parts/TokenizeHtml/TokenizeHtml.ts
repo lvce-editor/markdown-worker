@@ -38,6 +38,7 @@ const RE_BLOCK_COMMENT_CONTENT = /^[a-zA-Z\s]+/
 const RE_COMMENT_END = /^-->/
 const RE_TAG_TEXT = /^[^\s>]+/
 const RE_ANY_TEXT = /^[^\n]+/
+const RE_ATTRIBUTE_TEXT = /^[^\n<>/\s]+/
 const RE_BLOCK_COMMENT_START = /^<!--/
 const RE_SELF_CLOSING = /^\/>/
 
@@ -177,7 +178,7 @@ export const tokenizeHtml = (text: string): readonly HtmlToken[] => {
         } else if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
           token = TokenType.ClosingAngleBracket
           state = State.TopLevelContent
-        } else if ((next = part.match(RE_ANY_TEXT))) {
+        } else if ((next = part.match(RE_ATTRIBUTE_TEXT))) {
           token = TokenType.AttributeValue
           state = State.InsideOpeningTag
         } else {

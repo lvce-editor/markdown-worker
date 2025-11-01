@@ -413,7 +413,7 @@ test('input', () => {
       type: 9,
     },
     {
-      text: 'javascript:alert(1) autofocus>',
+      text: 'javascript:alert(1)',
       type: 11,
     },
     {
