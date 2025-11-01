@@ -429,7 +429,7 @@ test('input', () => {
       type: 2,
     },
     {
-      text: '',
+      text: '\n',
       type: 5,
     },
   ])
