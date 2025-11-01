@@ -235,7 +235,7 @@ test.skip('tag with single quotes', () => {
   ])
 })
 
-test.skip('tag with unquoted attribute', () => {
+test('tag with unquoted attribute', () => {
   expect(TokenizeHtml.tokenizeHtml('<div class=test>')).toEqual([
     {
       type: TokenType.OpeningAngleBracket,
