@@ -417,8 +417,20 @@ test('input', () => {
       type: 11,
     },
     {
-      text: '\n',
+      text: ' ',
       type: 7,
+    },
+    {
+      text: 'autofocus',
+      type: 8,
+    },
+    {
+      text: '>',
+      type: 2,
+    },
+    {
+      text: '',
+      type: 5,
     },
   ])
 })
