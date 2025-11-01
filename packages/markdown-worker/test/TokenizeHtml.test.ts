@@ -380,3 +380,10 @@ test('emoji closing tag', () => {
 test('invalid doctype', () => {
   expect(TokenizeHtml.tokenizeHtml('<!abc')).toEqual(expect.anything())
 })
+
+test.skip('input', () => {
+  const html = `<h1>test readme</h1>
+<input onfocus=javascript:alert(1) autofocus>
+`
+  expect(TokenizeHtml.tokenizeHtml(html)).toEqual(expect.anything())
+})
