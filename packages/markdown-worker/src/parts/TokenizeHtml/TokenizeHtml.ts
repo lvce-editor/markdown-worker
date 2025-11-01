@@ -177,6 +177,9 @@ export const tokenizeHtml = (text: string): readonly HtmlToken[] => {
         } else if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
           token = TokenType.ClosingAngleBracket
           state = State.TopLevelContent
+        } else if ((next = part.match(RE_ANY_TEXT))) {
+          token = TokenType.AttributeValue
+          state = State.InsideOpeningTag
         } else {
           throw new UnexpectedTokenError()
         }

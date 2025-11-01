@@ -381,9 +381,44 @@ test('invalid doctype', () => {
   expect(TokenizeHtml.tokenizeHtml('<!abc')).toEqual(expect.anything())
 })
 
-test.skip('input', () => {
+test('input', () => {
   const html = `<h1>test readme</h1>
 <input onfocus=javascript:alert(1) autofocus>
 `
-  expect(TokenizeHtml.tokenizeHtml(html)).toEqual(expect.anything())
+  expect(TokenizeHtml.tokenizeHtml(html)).toEqual([
+    { text: '<', type: 1 },
+    { text: 'h1', type: 3 },
+    { text: '>', type: 2 },
+    { text: 'test readme', type: 5 },
+    { text: '<', type: 1 },
+    { text: '/', type: 6 },
+    { text: 'h1', type: 4 },
+    { text: '>', type: 2 },
+    { text: '\n', type: 5 },
+    { text: '<', type: 1 },
+    {
+      text: 'input',
+      type: 3,
+    },
+    {
+      text: ' ',
+      type: 7,
+    },
+    {
+      text: 'onfocus',
+      type: 8,
+    },
+    {
+      text: '=',
+      type: 9,
+    },
+    {
+      text: 'javascript:alert(1) autofocus>',
+      type: 11,
+    },
+    {
+      text: '\n',
+      type: 7,
+    },
+  ])
 })
