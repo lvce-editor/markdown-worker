@@ -4,7 +4,6 @@
   "license": "MIT",
   "author": "Lvce Editor",
   "type": "module",
-  "main": "",
   "scripts": {
     "build": "node packages/build/src/build.js",
     "build:static": "node packages/build/src/build-static.js",
@@ -25,7 +24,7 @@
   },
   "devDependencies": {
     "@lerna/legacy-package-management": "^8.2.4",
-    "@lvce-editor/eslint-config": "^1.73.0",
+    "@lvce-editor/eslint-config": "^2.23.0",
     "eslint": "^9.19.0",
     "lerna": "^8.2.3",
     "prettier": "^3.6.2",
