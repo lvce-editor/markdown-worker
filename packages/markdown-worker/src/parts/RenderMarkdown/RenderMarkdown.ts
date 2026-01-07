@@ -18,6 +18,15 @@ export const renderMarkdown = async (markdown: string, options: MarkDownOptions 
       return localLink ? html : html.replace(RE_LINK_START, `<a target="_blank" rel="noreferrer noopener nofollow" `)
     }
   }
+  const { baseUrl } = options
+  if (baseUrl) {
+    const imageRenderer = renderer.image.bind(renderer)
+    renderer.image = (image): string => {
+      image.href = new URL(image.href, baseUrl).toString()
+      const html = imageRenderer(image)
+      return html
+    }
+  }
   const html = await marked.marked(markdown, { renderer })
   return html
 }
