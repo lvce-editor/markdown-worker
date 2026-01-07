@@ -6,8 +6,8 @@ import { UnexpectedTokenError } from '../src/parts/UnexpectedTokenError/Unexpect
 test('plain text', () => {
   expect(TokenizeHtml.tokenizeHtml('Hello World')).toEqual([
     {
-      type: TokenType.Content,
       text: 'Hello World',
+      type: TokenType.Content,
     },
   ])
 })
@@ -15,16 +15,16 @@ test('plain text', () => {
 test('simple tag', () => {
   expect(TokenizeHtml.tokenizeHtml('<div>')).toEqual([
     {
-      type: TokenType.OpeningAngleBracket,
       text: '<',
+      type: TokenType.OpeningAngleBracket,
     },
     {
-      type: TokenType.TagNameStart,
       text: 'div',
+      type: TokenType.TagNameStart,
     },
     {
-      type: TokenType.ClosingAngleBracket,
       text: '>',
+      type: TokenType.ClosingAngleBracket,
     },
   ])
 })
@@ -32,20 +32,20 @@ test('simple tag', () => {
 test('closing tag', () => {
   expect(TokenizeHtml.tokenizeHtml('</div>')).toEqual([
     {
-      type: TokenType.OpeningAngleBracket,
       text: '<',
+      type: TokenType.OpeningAngleBracket,
     },
     {
-      type: TokenType.ClosingTagSlash,
       text: '/',
+      type: TokenType.ClosingTagSlash,
     },
     {
-      type: TokenType.TagNameEnd,
       text: 'div',
+      type: TokenType.TagNameEnd,
     },
     {
-      type: TokenType.ClosingAngleBracket,
       text: '>',
+      type: TokenType.ClosingAngleBracket,
     },
   ])
 })
@@ -53,40 +53,40 @@ test('closing tag', () => {
 test('tag with attribute', () => {
   expect(TokenizeHtml.tokenizeHtml('<div class="test">')).toEqual([
     {
-      type: TokenType.OpeningAngleBracket,
       text: '<',
+      type: TokenType.OpeningAngleBracket,
     },
     {
-      type: TokenType.TagNameStart,
       text: 'div',
+      type: TokenType.TagNameStart,
     },
     {
-      type: TokenType.WhitespaceInsideOpeningTag,
       text: ' ',
+      type: TokenType.WhitespaceInsideOpeningTag,
     },
     {
-      type: TokenType.AttributeName,
       text: 'class',
+      type: TokenType.AttributeName,
     },
     {
-      type: TokenType.AttributeEqualSign,
       text: '=',
+      type: TokenType.AttributeEqualSign,
     },
     {
+      text: '"',
       type: TokenType.AttributeQuoteStart,
-      text: '"',
     },
     {
-      type: TokenType.AttributeValue,
       text: 'test',
+      type: TokenType.AttributeValue,
     },
     {
-      type: TokenType.AttributeQuoteEnd,
       text: '"',
+      type: TokenType.AttributeQuoteEnd,
     },
     {
-      type: TokenType.ClosingAngleBracket,
       text: '>',
+      type: TokenType.ClosingAngleBracket,
     },
   ])
 })
@@ -94,16 +94,16 @@ test('tag with attribute', () => {
 test('comment', () => {
   expect(TokenizeHtml.tokenizeHtml('<!-- test -->')).toEqual([
     {
-      type: TokenType.CommentStart,
       text: '<!--',
+      type: TokenType.CommentStart,
     },
     {
-      type: TokenType.Comment,
       text: ' test ',
+      type: TokenType.Comment,
     },
     {
-      type: TokenType.EndCommentTag,
       text: '-->',
+      type: TokenType.EndCommentTag,
     },
   ])
 })
@@ -111,16 +111,16 @@ test('comment', () => {
 test.skip('self closing tag', () => {
   expect(TokenizeHtml.tokenizeHtml('<img/>')).toEqual([
     {
-      type: TokenType.OpeningAngleBracket,
       text: '<',
+      type: TokenType.OpeningAngleBracket,
     },
     {
-      type: TokenType.TagNameStart,
       text: 'img',
+      type: TokenType.TagNameStart,
     },
     {
-      type: TokenType.ClosingAngleBracket,
       text: '/>',
+      type: TokenType.ClosingAngleBracket,
     },
   ])
 })
@@ -132,64 +132,64 @@ test.skip('throws on invalid token', () => {
 test('tag with multiple attributes', () => {
   expect(TokenizeHtml.tokenizeHtml('<img src="test.png" alt="test">')).toEqual([
     {
-      type: TokenType.OpeningAngleBracket,
       text: '<',
+      type: TokenType.OpeningAngleBracket,
     },
     {
-      type: TokenType.TagNameStart,
       text: 'img',
+      type: TokenType.TagNameStart,
     },
     {
-      type: TokenType.WhitespaceInsideOpeningTag,
       text: ' ',
+      type: TokenType.WhitespaceInsideOpeningTag,
     },
     {
-      type: TokenType.AttributeName,
       text: 'src',
-    },
-    {
-      type: TokenType.AttributeEqualSign,
-      text: '=',
-    },
-    {
-      type: TokenType.AttributeQuoteStart,
-      text: '"',
-    },
-    {
-      type: TokenType.AttributeValue,
-      text: 'test.png',
-    },
-    {
-      type: TokenType.AttributeQuoteEnd,
-      text: '"',
-    },
-    {
-      type: TokenType.WhitespaceInsideOpeningTag,
-      text: ' ',
-    },
-    {
       type: TokenType.AttributeName,
-      text: 'alt',
     },
     {
-      type: TokenType.AttributeEqualSign,
       text: '=',
+      type: TokenType.AttributeEqualSign,
     },
     {
+      text: '"',
       type: TokenType.AttributeQuoteStart,
-      text: '"',
     },
     {
+      text: 'test.png',
       type: TokenType.AttributeValue,
-      text: 'test',
     },
     {
-      type: TokenType.AttributeQuoteEnd,
       text: '"',
+      type: TokenType.AttributeQuoteEnd,
     },
     {
-      type: TokenType.ClosingAngleBracket,
+      text: ' ',
+      type: TokenType.WhitespaceInsideOpeningTag,
+    },
+    {
+      text: 'alt',
+      type: TokenType.AttributeName,
+    },
+    {
+      text: '=',
+      type: TokenType.AttributeEqualSign,
+    },
+    {
+      text: '"',
+      type: TokenType.AttributeQuoteStart,
+    },
+    {
+      text: 'test',
+      type: TokenType.AttributeValue,
+    },
+    {
+      text: '"',
+      type: TokenType.AttributeQuoteEnd,
+    },
+    {
       text: '>',
+      type: TokenType.ClosingAngleBracket,
     },
   ])
 })
@@ -197,40 +197,40 @@ test('tag with multiple attributes', () => {
 test.skip('tag with single quotes', () => {
   expect(TokenizeHtml.tokenizeHtml("<div class='test'>")).toEqual([
     {
-      type: TokenType.OpeningAngleBracket,
       text: '<',
+      type: TokenType.OpeningAngleBracket,
     },
     {
-      type: TokenType.TagNameStart,
       text: 'div',
+      type: TokenType.TagNameStart,
     },
     {
-      type: TokenType.WhitespaceInsideOpeningTag,
       text: ' ',
+      type: TokenType.WhitespaceInsideOpeningTag,
     },
     {
-      type: TokenType.AttributeName,
       text: 'class',
+      type: TokenType.AttributeName,
     },
     {
-      type: TokenType.AttributeEqualSign,
       text: '=',
+      type: TokenType.AttributeEqualSign,
     },
     {
+      text: "'",
       type: TokenType.AttributeQuoteStart,
-      text: "'",
     },
     {
-      type: TokenType.AttributeValue,
       text: 'test',
+      type: TokenType.AttributeValue,
     },
     {
-      type: TokenType.AttributeQuoteEnd,
       text: "'",
+      type: TokenType.AttributeQuoteEnd,
     },
     {
-      type: TokenType.ClosingAngleBracket,
       text: '>',
+      type: TokenType.ClosingAngleBracket,
     },
   ])
 })
@@ -238,32 +238,32 @@ test.skip('tag with single quotes', () => {
 test('tag with unquoted attribute', () => {
   expect(TokenizeHtml.tokenizeHtml('<div class=test>')).toEqual([
     {
-      type: TokenType.OpeningAngleBracket,
       text: '<',
+      type: TokenType.OpeningAngleBracket,
     },
     {
-      type: TokenType.TagNameStart,
       text: 'div',
+      type: TokenType.TagNameStart,
     },
     {
-      type: TokenType.WhitespaceInsideOpeningTag,
       text: ' ',
+      type: TokenType.WhitespaceInsideOpeningTag,
     },
     {
-      type: TokenType.AttributeName,
       text: 'class',
+      type: TokenType.AttributeName,
     },
     {
-      type: TokenType.AttributeEqualSign,
       text: '=',
+      type: TokenType.AttributeEqualSign,
     },
     {
-      type: TokenType.AttributeValue,
       text: 'test',
+      type: TokenType.AttributeValue,
     },
     {
-      type: TokenType.ClosingAngleBracket,
       text: '>',
+      type: TokenType.ClosingAngleBracket,
     },
   ])
 })
@@ -271,24 +271,24 @@ test('tag with unquoted attribute', () => {
 test('tag with boolean attribute', () => {
   expect(TokenizeHtml.tokenizeHtml('<input disabled>')).toEqual([
     {
-      type: TokenType.OpeningAngleBracket,
       text: '<',
+      type: TokenType.OpeningAngleBracket,
     },
     {
-      type: TokenType.TagNameStart,
       text: 'input',
+      type: TokenType.TagNameStart,
     },
     {
-      type: TokenType.WhitespaceInsideOpeningTag,
       text: ' ',
+      type: TokenType.WhitespaceInsideOpeningTag,
     },
     {
-      type: TokenType.AttributeName,
       text: 'disabled',
+      type: TokenType.AttributeName,
     },
     {
-      type: TokenType.ClosingAngleBracket,
       text: '>',
+      type: TokenType.ClosingAngleBracket,
     },
   ])
 })

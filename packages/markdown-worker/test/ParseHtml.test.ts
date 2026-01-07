@@ -13,8 +13,8 @@ test('heading', () => {
   const allowedAttributes: readonly string[] = []
   expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
     {
-      type: VirtualDomElements.H1,
       childCount: 1,
+      type: VirtualDomElements.H1,
     },
     text('Hello World'),
   ])
@@ -25,9 +25,9 @@ test('element with id', () => {
   const allowedAttributes = ['id']
   expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
     {
-      type: VirtualDomElements.H1,
       childCount: 0,
       id: 'hello-world',
+      type: VirtualDomElements.H1,
     },
   ])
 })
@@ -37,14 +37,14 @@ test('element with with image', () => {
   const allowedAttributes = ['alt', 'src']
   expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
     {
-      type: VirtualDomElements.P,
       childCount: 1,
+      type: VirtualDomElements.P,
     },
     {
-      type: VirtualDomElements.Img,
-      childCount: 0,
       alt: 'demo',
+      childCount: 0,
       src: './demo.png',
+      type: VirtualDomElements.Img,
     },
   ])
 })
@@ -54,18 +54,18 @@ test('element with with image and sibling tag', () => {
   const allowedAttributes = ['alt', 'src']
   expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
     {
-      type: VirtualDomElements.P,
       childCount: 1,
+      type: VirtualDomElements.P,
     },
     {
-      type: VirtualDomElements.Img,
-      childCount: 0,
       alt: 'demo',
+      childCount: 0,
       src: './demo.png',
+      type: VirtualDomElements.Img,
     },
     {
-      type: VirtualDomElements.P,
       childCount: 1,
+      type: VirtualDomElements.P,
     },
     text('more text'),
   ])
@@ -76,16 +76,16 @@ test('element with two child elements', () => {
   const allowedAttributes: readonly string[] = []
   expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
     {
-      type: VirtualDomElements.Div,
       childCount: 2,
+      type: VirtualDomElements.Div,
     },
     {
-      type: VirtualDomElements.Div,
       childCount: 0,
+      type: VirtualDomElements.Div,
     },
     {
-      type: VirtualDomElements.Div,
       childCount: 0,
+      type: VirtualDomElements.Div,
     },
   ])
 })
@@ -95,20 +95,20 @@ test('deeply nested tags', () => {
   const allowedAttributes: readonly string[] = []
   expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
     {
-      type: VirtualDomElements.Div,
       childCount: 2,
+      type: VirtualDomElements.Div,
     },
     {
-      type: VirtualDomElements.Div,
       childCount: 1,
+      type: VirtualDomElements.Div,
     },
     {
-      type: VirtualDomElements.Div,
       childCount: 0,
+      type: VirtualDomElements.Div,
     },
     {
-      type: VirtualDomElements.Div,
       childCount: 0,
+      type: VirtualDomElements.Div,
     },
   ])
 })
@@ -118,8 +118,8 @@ test('element with disallowed attribute', () => {
   const allowedAttributes: readonly string[] = []
   expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
     {
-      type: VirtualDomElements.H1,
       childCount: 0,
+      type: VirtualDomElements.H1,
     },
   ])
 })
@@ -129,14 +129,14 @@ test('nested element with id', () => {
   const allowedAttributes = ['href']
   expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
     {
-      type: VirtualDomElements.P,
       childCount: 2,
+      type: VirtualDomElements.P,
     },
     text('some text'),
     {
-      type: VirtualDomElements.A,
       childCount: 1,
       href: '#',
+      type: VirtualDomElements.A,
     },
     text('link'),
   ])
@@ -147,9 +147,9 @@ test('element with class', () => {
   const allowedAttributes = ['className']
   expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
     {
-      type: VirtualDomElements.Div,
       childCount: 0,
       className: 'EditorRow',
+      type: VirtualDomElements.Div,
     },
   ])
 })
@@ -159,8 +159,8 @@ test('text with angle bracket', () => {
   const allowedAttributes: readonly string[] = []
   expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
     {
-      type: VirtualDomElements.Div,
       childCount: 1,
+      type: VirtualDomElements.Div,
     },
     text('>'),
   ])
@@ -171,26 +171,26 @@ test('closing tag updates current element correctly', () => {
   const allowedAttributes: readonly string[] = []
   expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
     {
-      type: VirtualDomElements.Div,
       childCount: 2,
+      type: VirtualDomElements.Div,
     },
     {
-      type: VirtualDomElements.P,
       childCount: 1,
+      type: VirtualDomElements.P,
     },
     {
+      childCount: 0,
       text: 'text',
       type: 12,
-      childCount: 0,
     },
     {
-      type: VirtualDomElements.Span,
       childCount: 1,
+      type: VirtualDomElements.Span,
     },
     {
+      childCount: 0,
       text: 'more',
       type: 12,
-      childCount: 0,
     },
   ])
 })
@@ -200,17 +200,17 @@ test('duplicate closing tag', () => {
   const allowedAttributes: readonly string[] = []
   expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
     {
+      childCount: 1,
       type: VirtualDomElements.Div,
-      childCount: 1,
     },
     {
+      childCount: 1,
       type: VirtualDomElements.P,
-      childCount: 1,
     },
     {
+      childCount: 0,
       text: 'text',
       type: 12,
-      childCount: 0,
     },
   ])
 })

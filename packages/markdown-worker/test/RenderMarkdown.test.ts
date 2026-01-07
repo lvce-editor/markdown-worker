@@ -20,8 +20,8 @@ test('link', async () => {
 test('link - external', async () => {
   // @ts-ignore
   globalThis.location = {
-    protocol: 'http:',
     hostname: 'localhost',
+    protocol: 'http:',
   }
   expect(
     await RenderMarkdown.renderMarkdown('[test](https://example.com)', {

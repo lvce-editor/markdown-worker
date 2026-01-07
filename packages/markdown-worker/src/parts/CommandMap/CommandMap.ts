@@ -4,12 +4,12 @@ import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as RenderMarkdown from '../RenderMarkdown/RenderMarkdown.ts'
 
 export const commandMap = {
+  'Markdown.getMarkDownVirtualDom': GetMarkdownVirtualDom.getMarkdownVirtualDom,
   'Markdown.getVirtualDom': GetMarkdownVirtualDom.getMarkdownVirtualDom,
   'Markdown.handleMessagePort': HandleMessagePort.handleMessagePort,
   'Markdown.render': RenderMarkdown.renderMarkdown,
-  'Markdown.terminate': terminate,
 
   // deprecated
   'Markdown.renderMarkdown': RenderMarkdown.renderMarkdown,
-  'Markdown.getMarkDownVirtualDom': GetMarkdownVirtualDom.getMarkdownVirtualDom,
+  'Markdown.terminate': terminate,
 }

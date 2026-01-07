@@ -4,19 +4,19 @@ import * as TokenType from '../HtmlTokenType/HtmlTokenType.ts'
 import { UnexpectedTokenError } from '../UnexpectedTokenError/UnexpectedTokenError.ts'
 
 const State = {
-  TopLevelContent: 1,
-  AfterOpeningAngleBracket: 2,
-  InsideOpeningTag: 3,
-  AfterClosingTagSlash: 4,
-  AfterClosingTagName: 5,
-  InsideOpeningTagAfterWhitespace: 6,
-  AfterAttributeName: 7,
   AfterAttributeEqualSign: 8,
-  InsideAttributeAfterDoubleQuote: 9,
-  AfterAttributeValueInsideDoubleQuote: 10,
+  AfterAttributeName: 7,
   AfterAttributeValueClosingQuote: 11,
+  AfterAttributeValueInsideDoubleQuote: 10,
+  AfterClosingTagName: 5,
+  AfterClosingTagSlash: 4,
   AfterExclamationMark: 16,
+  AfterOpeningAngleBracket: 2,
+  InsideAttributeAfterDoubleQuote: 9,
   InsideComment: 17,
+  InsideOpeningTag: 3,
+  InsideOpeningTagAfterWhitespace: 6,
+  TopLevelContent: 1,
 }
 
 const RE_ANGLE_BRACKET_OPEN = /^</
@@ -52,23 +52,94 @@ export const tokenizeHtml = (text: string): readonly HtmlToken[] => {
   while (index < text.length) {
     const part = text.slice(index)
     switch (state) {
-      case State.TopLevelContent:
-        if ((next = part.match(RE_ANGLE_BRACKET_OPEN_TAG))) {
+      case State.AfterAttributeEqualSign:
+        if ((next = part.match(RE_DOUBLE_QUOTE))) {
+          token = TokenType.AttributeQuoteStart
+          state = State.InsideAttributeAfterDoubleQuote
+        } else if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
+          token = TokenType.ClosingAngleBracket
+          state = State.TopLevelContent
+        } else if ((next = part.match(RE_ATTRIBUTE_TEXT))) {
+          token = TokenType.AttributeValue
+          state = State.InsideOpeningTag
+        } else {
+          throw new UnexpectedTokenError()
+        }
+        break
+      case State.AfterAttributeName:
+        if ((next = part.match(RE_EQUAL_SIGN))) {
+          token = TokenType.AttributeEqualSign
+          state = State.AfterAttributeEqualSign
+        } else if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
+          token = TokenType.ClosingAngleBracket
+          state = State.TopLevelContent
+        } else if ((next = part.match(RE_WHITESPACE))) {
+          token = TokenType.WhitespaceInsideOpeningTag
+          state = State.InsideOpeningTagAfterWhitespace
+        } else if ((next = part.match(RE_ANGLE_BRACKET_OPEN))) {
           token = TokenType.OpeningAngleBracket
           state = State.AfterOpeningAngleBracket
-        } else if ((next = part.match(RE_CONTENT))) {
-          token = TokenType.Content
+        } else {
+          text.slice(index) // ?
+          throw new UnexpectedTokenError()
+        }
+        break
+      case State.AfterAttributeValueClosingQuote:
+        if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
+          token = TokenType.ClosingAngleBracket
           state = State.TopLevelContent
-        } else if ((next = part.match(RE_BLOCK_COMMENT_START))) {
-          token = TokenType.CommentStart
-          state = State.InsideComment
-        } else if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
-          token = TokenType.Content
-          state = State.TopLevelContent
-        } else if ((next = part.match(RE_ANGLE_BRACKET_OPEN))) {
-          token = TokenType.Text
+        } else if ((next = part.match(RE_WHITESPACE))) {
+          token = TokenType.WhitespaceInsideOpeningTag
+          state = State.InsideOpeningTagAfterWhitespace
+        } else if ((next = part.match(RE_SELF_CLOSING))) {
+          token = TokenType.ClosingAngleBracket
           state = State.TopLevelContent
         } else {
+          throw new UnexpectedTokenError()
+        }
+        break
+      case State.AfterAttributeValueInsideDoubleQuote:
+        if ((next = part.match(RE_DOUBLE_QUOTE))) {
+          token = TokenType.AttributeQuoteEnd
+          state = State.AfterAttributeValueClosingQuote
+        } else {
+          throw new UnexpectedTokenError()
+        }
+        break
+      case State.AfterClosingTagName:
+        if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
+          token = TokenType.ClosingAngleBracket
+          state = State.TopLevelContent
+        } else if ((next = part.match(RE_WHITESPACE))) {
+          token = TokenType.Content
+          state = State.TopLevelContent
+        } else {
+          throw new UnexpectedTokenError()
+        }
+        break
+      case State.AfterClosingTagSlash:
+        if ((next = part.match(RE_TAGNAME))) {
+          token = TokenType.TagNameEnd
+          state = State.AfterClosingTagName
+        } else if ((next = part.match(RE_WHITESPACE))) {
+          token = TokenType.WhitespaceAfterClosingTagSlash
+          state = State.TopLevelContent
+        } else if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
+          token = TokenType.ClosingAngleBracket
+          state = State.TopLevelContent
+        } else {
+          throw new UnexpectedTokenError()
+        }
+        break
+      case State.AfterExclamationMark:
+        if ((next = part.match(RE_DASH_DASH))) {
+          token = TokenType.StartCommentDashes
+          state = State.InsideComment
+        } else if ((next = part.match(RE_DOCTYPE))) {
+          token = TokenType.Doctype
+          state = State.InsideOpeningTag
+        } else {
+          text.slice(index) // ?
           throw new UnexpectedTokenError()
         }
         break
@@ -96,15 +167,14 @@ export const tokenizeHtml = (text: string): readonly HtmlToken[] => {
           throw new UnexpectedTokenError()
         }
         break
-      case State.AfterExclamationMark:
-        if ((next = part.match(RE_DASH_DASH))) {
-          token = TokenType.StartCommentDashes
-          state = State.InsideComment
-        } else if ((next = part.match(RE_DOCTYPE))) {
-          token = TokenType.Doctype
-          state = State.InsideOpeningTag
+      case State.InsideAttributeAfterDoubleQuote:
+        if ((next = text.slice(index).match(RE_ATTRIBUTE_VALUE_INSIDE_DOUBLE_QUOTE))) {
+          token = TokenType.AttributeValue
+          state = State.AfterAttributeValueInsideDoubleQuote
+        } else if ((next = part.match(RE_DOUBLE_QUOTE))) {
+          token = TokenType.AttributeQuoteEnd
+          state = State.AfterAttributeValueClosingQuote
         } else {
-          text.slice(index) // ?
           throw new UnexpectedTokenError()
         }
         break
@@ -153,91 +223,21 @@ export const tokenizeHtml = (text: string): readonly HtmlToken[] => {
           throw new UnexpectedTokenError()
         }
         break
-      case State.AfterAttributeName:
-        if ((next = part.match(RE_EQUAL_SIGN))) {
-          token = TokenType.AttributeEqualSign
-          state = State.AfterAttributeEqualSign
-        } else if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
-          token = TokenType.ClosingAngleBracket
-          state = State.TopLevelContent
-        } else if ((next = part.match(RE_WHITESPACE))) {
-          token = TokenType.WhitespaceInsideOpeningTag
-          state = State.InsideOpeningTagAfterWhitespace
-        } else if ((next = part.match(RE_ANGLE_BRACKET_OPEN))) {
+      case State.TopLevelContent:
+        if ((next = part.match(RE_ANGLE_BRACKET_OPEN_TAG))) {
           token = TokenType.OpeningAngleBracket
           state = State.AfterOpeningAngleBracket
-        } else {
-          text.slice(index) // ?
-          throw new UnexpectedTokenError()
-        }
-        break
-      case State.AfterAttributeEqualSign:
-        if ((next = part.match(RE_DOUBLE_QUOTE))) {
-          token = TokenType.AttributeQuoteStart
-          state = State.InsideAttributeAfterDoubleQuote
-        } else if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
-          token = TokenType.ClosingAngleBracket
-          state = State.TopLevelContent
-        } else if ((next = part.match(RE_ATTRIBUTE_TEXT))) {
-          token = TokenType.AttributeValue
-          state = State.InsideOpeningTag
-        } else {
-          throw new UnexpectedTokenError()
-        }
-        break
-      case State.InsideAttributeAfterDoubleQuote:
-        if ((next = text.slice(index).match(RE_ATTRIBUTE_VALUE_INSIDE_DOUBLE_QUOTE))) {
-          token = TokenType.AttributeValue
-          state = State.AfterAttributeValueInsideDoubleQuote
-        } else if ((next = part.match(RE_DOUBLE_QUOTE))) {
-          token = TokenType.AttributeQuoteEnd
-          state = State.AfterAttributeValueClosingQuote
-        } else {
-          throw new UnexpectedTokenError()
-        }
-        break
-      case State.AfterAttributeValueInsideDoubleQuote:
-        if ((next = part.match(RE_DOUBLE_QUOTE))) {
-          token = TokenType.AttributeQuoteEnd
-          state = State.AfterAttributeValueClosingQuote
-        } else {
-          throw new UnexpectedTokenError()
-        }
-        break
-      case State.AfterAttributeValueClosingQuote:
-        if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
-          token = TokenType.ClosingAngleBracket
-          state = State.TopLevelContent
-        } else if ((next = part.match(RE_WHITESPACE))) {
-          token = TokenType.WhitespaceInsideOpeningTag
-          state = State.InsideOpeningTagAfterWhitespace
-        } else if ((next = part.match(RE_SELF_CLOSING))) {
-          token = TokenType.ClosingAngleBracket
-          state = State.TopLevelContent
-        } else {
-          throw new UnexpectedTokenError()
-        }
-        break
-      case State.AfterClosingTagSlash:
-        if ((next = part.match(RE_TAGNAME))) {
-          token = TokenType.TagNameEnd
-          state = State.AfterClosingTagName
-        } else if ((next = part.match(RE_WHITESPACE))) {
-          token = TokenType.WhitespaceAfterClosingTagSlash
-          state = State.TopLevelContent
-        } else if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
-          token = TokenType.ClosingAngleBracket
-          state = State.TopLevelContent
-        } else {
-          throw new UnexpectedTokenError()
-        }
-        break
-      case State.AfterClosingTagName:
-        if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
-          token = TokenType.ClosingAngleBracket
-          state = State.TopLevelContent
-        } else if ((next = part.match(RE_WHITESPACE))) {
+        } else if ((next = part.match(RE_CONTENT))) {
           token = TokenType.Content
+          state = State.TopLevelContent
+        } else if ((next = part.match(RE_BLOCK_COMMENT_START))) {
+          token = TokenType.CommentStart
+          state = State.InsideComment
+        } else if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
+          token = TokenType.Content
+          state = State.TopLevelContent
+        } else if ((next = part.match(RE_ANGLE_BRACKET_OPEN))) {
+          token = TokenType.Text
           state = State.TopLevelContent
         } else {
           throw new UnexpectedTokenError()
@@ -248,8 +248,8 @@ export const tokenizeHtml = (text: string): readonly HtmlToken[] => {
     }
     const tokenText = next[0]
     tokens.push({
-      type: token,
       text: tokenText,
+      type: token,
     })
     index += tokenText.length
   }
