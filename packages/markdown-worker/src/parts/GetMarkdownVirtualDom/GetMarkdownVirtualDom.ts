@@ -1,4 +1,4 @@
-import type { VirtualDomNode} from '@lvce-editor/virtual-dom-worker';
+import type { VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 import { VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import * as AllowedMarkdownAttributes from '../AllowedMarkdownAttributes/AllowedMarkdownAttributes.ts'
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
@@ -14,11 +14,11 @@ export const getMarkdownVirtualDom = (html: string): readonly VirtualDomNode[] =
   const markdownChildCount = GetVirtualDomChildCount.getVirtualDomChildCount(childDom)
   return [
     {
-      type: VirtualDomElements.Div,
-      className: ClassNames.Markdown,
-      role: AriaRoles.Document,
-      onContextMenu: DomEventListenerFunctions.HandleReadmeContextMenu,
       childCount: markdownChildCount,
+      className: ClassNames.Markdown,
+      onContextMenu: DomEventListenerFunctions.HandleReadmeContextMenu,
+      role: AriaRoles.Document,
+      type: VirtualDomElements.Div,
     },
     ...childDom,
   ]

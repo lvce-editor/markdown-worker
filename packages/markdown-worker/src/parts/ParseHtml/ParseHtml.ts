@@ -1,4 +1,4 @@
-import type { VirtualDomNode} from '@lvce-editor/virtual-dom-worker';
+import type { VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 import { text } from '@lvce-editor/virtual-dom-worker'
 import * as Assert from '../Assert/Assert.ts'
 import * as GetVirtualDomTag from '../GetVirtualDomTag/GetVirtualDomTag.ts'
@@ -13,33 +13,14 @@ export const parseHtml = (html: string, allowedAttributes: readonly string[]): r
   const tokens = TokenizeHtml.tokenizeHtml(html)
   const dom: VirtualDomNode[] = []
   const root: VirtualDomNode = {
-    type: 0,
     childCount: 0,
+    type: 0,
   }
   let current: any = root
   const stack: VirtualDomNode[] = [root]
   let attributeName = ''
   for (const token of tokens) {
     switch (token.type) {
-      case HtmlTokenType.TagNameStart:
-        current.childCount++
-        current = {
-          type: GetVirtualDomTag.getVirtualDomTag(token.text),
-          childCount: 0,
-        }
-        dom.push(current)
-        if (!IsSelfClosingTag.isSelfClosingTag(token.text)) {
-          stack.push(current)
-        }
-        break
-      case HtmlTokenType.TagNameEnd:
-        stack.pop()
-        current = stack.at(-1) || root
-        break
-      case HtmlTokenType.Content:
-        current.childCount++
-        dom.push(text(ParseText.parseText(token.text)))
-        break
       case HtmlTokenType.AttributeName:
         attributeName = token.text
         if (attributeName === 'class') {
@@ -51,6 +32,25 @@ export const parseHtml = (html: string, allowedAttributes: readonly string[]): r
           current[attributeName] = token.text
         }
         attributeName = ''
+        break
+      case HtmlTokenType.Content:
+        current.childCount++
+        dom.push(text(ParseText.parseText(token.text)))
+        break
+      case HtmlTokenType.TagNameEnd:
+        stack.pop()
+        current = stack.at(-1) || root
+        break
+      case HtmlTokenType.TagNameStart:
+        current.childCount++
+        current = {
+          childCount: 0,
+          type: GetVirtualDomTag.getVirtualDomTag(token.text),
+        }
+        dom.push(current)
+        if (!IsSelfClosingTag.isSelfClosingTag(token.text)) {
+          stack.push(current)
+        }
         break
       default:
         break

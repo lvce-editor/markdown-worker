@@ -1,4 +1,4 @@
 export interface HtmlToken {
-  readonly type: number
   readonly text: string
+  readonly type: number
 }

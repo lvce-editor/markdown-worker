@@ -37,8 +37,8 @@ test('heading', () => {
       type: 4,
     },
     {
-      type: VirtualDomElements.H1,
       childCount: 1,
+      type: VirtualDomElements.H1,
     },
     text('Hello World'),
   ])
@@ -54,12 +54,12 @@ test('nested elements', () => {
       type: 4,
     },
     {
-      type: VirtualDomElements.Div,
       childCount: 1,
+      type: VirtualDomElements.Div,
     },
     {
-      type: VirtualDomElements.P,
       childCount: 1,
+      type: VirtualDomElements.P,
     },
     text('Hello World'),
   ])
