@@ -17,6 +17,30 @@ test('link', async () => {
   expect(await RenderMarkdown.renderMarkdown('[test](https://example.com)')).toBe('<p><a href="https://example.com">test</a></p>\n')
 })
 
+test('image - with base url', async () => {
+  expect(
+    await RenderMarkdown.renderMarkdown('![test](./image.png)', {
+      baseUrl: 'https://example.com',
+    }),
+  ).toBe('<p><img src="https://example.com/image.png" alt="test"></p>\n')
+})
+
+test('image - invalid - with base url', async () => {
+  expect(
+    await RenderMarkdown.renderMarkdown('![test](...)', {
+      baseUrl: 'https://example.com',
+    }),
+  ).toBe('<p><img src="https://example.com/..." alt="test"></p>\n')
+})
+
+test('image - invalid 2 - with base url', async () => {
+  expect(
+    await RenderMarkdown.renderMarkdown('![test](https://example.com)', {
+      baseUrl: 'https://example.com',
+    }),
+  ).toBe('<p><img src="https://example.com/" alt="test"></p>\n')
+})
+
 test('link - external', async () => {
   // @ts-ignore
   globalThis.location = {
