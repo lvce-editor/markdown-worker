@@ -4,11 +4,14 @@ import * as AllowedMarkdownAttributes from '../AllowedMarkdownAttributes/Allowed
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as Assert from '../Assert/Assert.ts'
 import * as ClassNames from '../ClassNames/ClassNames.ts'
-import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import * as GetVirtualDomChildCount from '../GetVirtualDomChildCount/GetVirtualDomChildCount.ts'
 import * as ParseHtml from '../ParseHtml/ParseHtml.ts'
 
-export const getMarkdownVirtualDom = (html: string): readonly VirtualDomNode[] => {
+interface MarkdownVirtualDomOptions {
+  readonly onContextMenu?: string | number
+}
+
+export const getMarkdownVirtualDom = (html: string, { onContextMenu = undefined }: MarkdownVirtualDomOptions = {}): readonly VirtualDomNode[] => {
   Assert.string(html)
   const childDom = ParseHtml.parseHtml(html, AllowedMarkdownAttributes.allowedMarkdownAttributes)
   const markdownChildCount = GetVirtualDomChildCount.getVirtualDomChildCount(childDom)
@@ -16,7 +19,7 @@ export const getMarkdownVirtualDom = (html: string): readonly VirtualDomNode[] =
     {
       childCount: markdownChildCount,
       className: ClassNames.Markdown,
-      onContextMenu: DomEventListenerFunctions.HandleReadmeContextMenu,
+      onContextMenu,
       role: AriaRoles.Document,
       type: VirtualDomElements.Div,
     },
