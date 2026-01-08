@@ -7,7 +7,7 @@ test('empty string', () => {
     {
       childCount: 0,
       className: 'Markdown',
-      onContextMenu: 'handleReadmeContextMenu',
+
       role: 'document',
       type: 4,
     },
@@ -19,7 +19,7 @@ test('plain text', () => {
     {
       childCount: 1,
       className: 'Markdown',
-      onContextMenu: 'handleReadmeContextMenu',
+
       role: 'document',
       type: 4,
     },
@@ -32,7 +32,7 @@ test('heading', () => {
     {
       childCount: 1,
       className: 'Markdown',
-      onContextMenu: 'handleReadmeContextMenu',
+
       role: 'document',
       type: 4,
     },
@@ -49,7 +49,7 @@ test('nested elements', () => {
     {
       childCount: 1,
       className: 'Markdown',
-      onContextMenu: 'handleReadmeContextMenu',
+
       role: 'document',
       type: 4,
     },
