@@ -38,7 +38,15 @@ test('image - invalid 2 - with base url', async () => {
     await RenderMarkdown.renderMarkdown('![test](https://example.com)', {
       baseUrl: 'https://example.com',
     }),
-  ).toBe('<p><img src="https://example.com/" alt="test"></p>\n')
+  ).toBe('<p><img src="https://example.com" alt="test"></p>\n')
+})
+
+test('image - with invalid base url', async () => {
+  expect(
+    await RenderMarkdown.renderMarkdown('![test](./image.png)', {
+      baseUrl: '/remote/builtin.theme-cobalt2',
+    }),
+  ).toBe('<p><img src="/remote/builtin.theme-cobalt2/image.png" alt="test"></p>\n')
 })
 
 test('link - external', async () => {

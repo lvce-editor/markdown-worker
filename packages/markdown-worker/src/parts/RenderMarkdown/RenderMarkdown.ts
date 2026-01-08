@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import * as marked from 'marked'
+import { joinUrl } from '../JoinUrl/JoinUrl.ts'
 
 export interface MarkDownOptions {
   readonly baseUrl?: string
@@ -22,7 +23,7 @@ export const renderMarkdown = async (markdown: string, options: MarkDownOptions 
   if (baseUrl) {
     const imageRenderer = renderer.image.bind(renderer)
     renderer.image = (image): string => {
-      image.href = new URL(image.href, baseUrl).toString()
+      image.href = joinUrl(image.href, baseUrl)
       const html = imageRenderer(image)
       return html
     }
