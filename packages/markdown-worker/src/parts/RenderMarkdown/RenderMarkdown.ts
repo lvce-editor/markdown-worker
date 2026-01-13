@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import * as marked from 'marked'
+import type { MarkDownOptions } from '../MarkDownOptions/MarkDownOptions.ts'
 import { joinUrl } from '../JoinUrl/JoinUrl.ts'
-
-export interface MarkDownOptions {
-  readonly baseUrl?: string
-  readonly linksExternal?: boolean
-}
 
 const RE_LINK_START = /^<a /
 
