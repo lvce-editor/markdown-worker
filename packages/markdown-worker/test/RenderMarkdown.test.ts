@@ -1,4 +1,7 @@
 import { expect, test } from '@jest/globals'
+import { PlainMessagePortRpc } from '@lvce-editor/rpc'
+import { RendererWorker, SyntaxHighlightingWorker } from '@lvce-editor/rpc-registry'
+import { initializeSyntaxHighlightingWorker } from '../src/parts/InitializeSyntaxHighlightingWorker/InitializeSyntaxHighlightingWorker.ts'
 import * as RenderMarkdown from '../src/parts/RenderMarkdown/RenderMarkdown.ts'
 
 test('empty string', async () => {
@@ -64,6 +67,90 @@ test('link - external', async () => {
 
 test('code block', async () => {
   expect(await RenderMarkdown.renderMarkdown('```\ncode\n```')).toBe('<pre><code>code\n</code></pre>\n')
+})
+
+test('code block - unknown language', async () => {
+  expect(await RenderMarkdown.renderMarkdown('```unknown\ncode\n```')).toBe('<pre><code class="language-unknown">code\n</code></pre>\n')
+})
+
+test('code block - syntax highlighted using contributed extension alias', async () => {
+  using mockRendererRpc = RendererWorker.registerMockRpc({
+    async 'SendMessagePortToSyntaxHighlightingWorker.sendMessagePortToSyntaxHighlightingWorker'(port: MessagePort): Promise<void> {
+      await PlainMessagePortRpc.create({
+        commandMap: {
+          'Tokenizer.tokenizeCodeBlock': () => [['git', 'Token Command', ' status', 'Token Text']],
+        },
+        messagePort: port,
+      })
+    },
+  })
+  await initializeSyntaxHighlightingWorker()
+
+  expect(
+    await RenderMarkdown.renderMarkdown('```sh\ngit status\n```', {
+      languages: [
+        {
+          extensions: ['.sh'],
+          id: 'shellscript',
+          tokenize: '/extensions/shellscript/tokenize.js',
+        },
+      ],
+    }),
+  ).toBe('<pre><code class="language-sh"><span class="Token Command">git</span><span class="Token Text"> status</span>\n</code></pre>\n')
+  expect(mockRendererRpc.invocations).toEqual([
+    [
+      'SendMessagePortToSyntaxHighlightingWorker.sendMessagePortToSyntaxHighlightingWorker',
+      expect.anything(),
+      'HandleMessagePort.handleMessagePort2',
+    ],
+  ])
+  await SyntaxHighlightingWorker.dispose()
+})
+
+test('code block - keeps normal escaped output when syntax highlighting fails', async () => {
+  using mockRendererRpc = RendererWorker.registerMockRpc({
+    async 'SendMessagePortToSyntaxHighlightingWorker.sendMessagePortToSyntaxHighlightingWorker'(port: MessagePort): Promise<void> {
+      await PlainMessagePortRpc.create({
+        commandMap: {
+          'Tokenizer.tokenizeCodeBlock': () => {
+            throw new Error('tokenizer failed')
+          },
+        },
+        messagePort: port,
+      })
+    },
+  })
+  await initializeSyntaxHighlightingWorker()
+
+  expect(
+    await RenderMarkdown.renderMarkdown('```javascript\nconst value = "<unsafe>"\n```', {
+      languages: [{ id: 'javascript', tokenize: '/extensions/javascript/tokenize.js' }],
+    }),
+  ).toBe('<pre><code class="language-javascript">const value = &quot;&lt;unsafe&gt;&quot;\n</code></pre>\n')
+  expect(mockRendererRpc.invocations).toHaveLength(1)
+  await SyntaxHighlightingWorker.dispose()
+})
+
+test('code block - keeps normal output for invalid tokenizer response', async () => {
+  using mockRendererRpc = RendererWorker.registerMockRpc({
+    async 'SendMessagePortToSyntaxHighlightingWorker.sendMessagePortToSyntaxHighlightingWorker'(port: MessagePort): Promise<void> {
+      await PlainMessagePortRpc.create({
+        commandMap: {
+          'Tokenizer.tokenizeCodeBlock': () => ({}),
+        },
+        messagePort: port,
+      })
+    },
+  })
+  await initializeSyntaxHighlightingWorker()
+
+  expect(
+    await RenderMarkdown.renderMarkdown('```javascript\nconst value = 1\n```', {
+      languages: [{ id: 'javascript', tokenize: '/extensions/javascript/tokenize.js' }],
+    }),
+  ).toBe('<pre><code class="language-javascript">const value = 1\n</code></pre>\n')
+  expect(mockRendererRpc.invocations).toHaveLength(1)
+  await SyntaxHighlightingWorker.dispose()
 })
 
 test('list', async () => {
