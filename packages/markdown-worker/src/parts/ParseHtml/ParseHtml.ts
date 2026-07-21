@@ -12,6 +12,8 @@ export const parseHtml = (html: string, allowedAttributes: readonly string[]): r
   Assert.array(allowedAttributes)
   const tokens = TokenizeHtml.tokenizeHtml(html)
   const dom: VirtualDomNode[] = []
+  // The root is mutated through the current alias and must be recreated for every parse.
+  // eslint-disable-next-line virtual-dom/hoist-static-nodes
   const root: VirtualDomNode = {
     childCount: 0,
     type: VirtualDomElements.Root,
