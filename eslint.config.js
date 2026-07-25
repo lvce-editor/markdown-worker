@@ -18,6 +18,7 @@ export default [
     files: ['packages/markdown-worker/test/**/*.ts'],
     rules: {
       'virtual-dom/prefer-constants': 'off',
+      'virtual-dom/secure-links': 'off',
     },
   },
 ]
