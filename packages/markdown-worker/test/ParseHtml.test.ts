@@ -166,6 +166,18 @@ test('text with angle bracket', () => {
   ])
 })
 
+test('text with quotes', () => {
+  const html = '<h2>&quot;What&#39;s Changed&quot;</h2>'
+  const allowedAttributes: readonly string[] = []
+  expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
+    {
+      childCount: 1,
+      type: VirtualDomElements.H2,
+    },
+    text('"What\'s Changed"'),
+  ])
+})
+
 test('closing tag updates current element correctly', () => {
   const html = '<div><p>text</p><span>more</span></div>'
   const allowedAttributes: readonly string[] = []
