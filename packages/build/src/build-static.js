@@ -1,9 +1,13 @@
 import { join } from 'node:path'
+import { createRequire } from 'node:module'
 import { pathToFileURL } from 'node:url'
 import { root } from './root.js'
 import { cp } from 'node:fs/promises'
 
-const sharedProcessPath = join(root, 'packages', 'server', 'node_modules', '@lvce-editor', 'shared-process', 'index.js')
+const requireFromServerWorkspace = createRequire(join(root, 'packages', 'server', 'package.json'))
+const serverPackagePath = requireFromServerWorkspace.resolve('@lvce-editor/server/package.json')
+const requireFromServer = createRequire(serverPackagePath)
+const sharedProcessPath = requireFromServer.resolve('@lvce-editor/shared-process')
 
 const sharedProcessUrl = pathToFileURL(sharedProcessPath).toString()
 
