@@ -65,6 +65,31 @@ test('nested elements', () => {
   ])
 })
 
+test('horizontal rule with sibling elements', () => {
+  expect(GetMarkdownVirtualDom.getMarkdownVirtualDom('<p>First</p><hr><p>Second</p>')).toEqual([
+    {
+      childCount: 3,
+      className: 'Markdown',
+      role: 'document',
+      type: VirtualDomElements.Div,
+    },
+    {
+      childCount: 1,
+      type: VirtualDomElements.P,
+    },
+    text('First'),
+    {
+      childCount: 0,
+      type: VirtualDomElements.Hr,
+    },
+    {
+      childCount: 1,
+      type: VirtualDomElements.P,
+    },
+    text('Second'),
+  ])
+})
+
 test('throws error for non-string input', () => {
   // @ts-expect-error
   expect(() => GetMarkdownVirtualDom.getMarkdownVirtualDom(123)).toThrow()

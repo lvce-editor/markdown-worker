@@ -21,6 +21,7 @@ export const parseHtml = (html: string, allowedAttributes: readonly string[]): r
   let current: any = root
   const stack: VirtualDomNode[] = [root]
   let attributeName = ''
+  let currentTagIsSelfClosing = false
   for (const token of tokens) {
     switch (token.type) {
       case HtmlTokenType.AttributeName:
@@ -39,6 +40,12 @@ export const parseHtml = (html: string, allowedAttributes: readonly string[]): r
         current.childCount++
         dom.push(text(ParseText.parseText(token.text)))
         break
+      case HtmlTokenType.ClosingAngleBracket:
+        if (currentTagIsSelfClosing) {
+          current = stack.at(-1) || root
+          currentTagIsSelfClosing = false
+        }
+        break
       case HtmlTokenType.TagNameEnd:
         stack.pop()
         current = stack.at(-1) || root
@@ -50,7 +57,8 @@ export const parseHtml = (html: string, allowedAttributes: readonly string[]): r
           type: GetVirtualDomTag.getVirtualDomTag(token.text),
         }
         dom.push(current)
-        if (!IsSelfClosingTag.isSelfClosingTag(token.text)) {
+        currentTagIsSelfClosing = IsSelfClosingTag.isSelfClosingTag(token.text)
+        if (!currentTagIsSelfClosing) {
           stack.push(current)
         }
         break
