@@ -36,15 +36,15 @@ export const parseHtml = (html: string, allowedAttributes: readonly string[]): r
         }
         attributeName = ''
         break
-      case HtmlTokenType.Content:
-        current.childCount++
-        dom.push(text(ParseText.parseText(token.text)))
-        break
       case HtmlTokenType.ClosingAngleBracket:
         if (currentTagIsSelfClosing) {
           current = stack.at(-1) || root
           currentTagIsSelfClosing = false
         }
+        break
+      case HtmlTokenType.Content:
+        current.childCount++
+        dom.push(text(ParseText.parseText(token.text)))
         break
       case HtmlTokenType.TagNameEnd:
         stack.pop()
