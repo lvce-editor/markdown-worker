@@ -142,6 +142,29 @@ test('nested element with id', () => {
   ])
 })
 
+test('strong text followed by a link remains inline', () => {
+  const html = '<p><strong>Full Changelog</strong>: <a href="https://example.com/compare/v1...v2">https://example.com/compare/v1...v2</a></p>'
+  const allowedAttributes = ['href']
+  expect(ParseHtml.parseHtml(html, allowedAttributes)).toEqual([
+    {
+      childCount: 3,
+      type: VirtualDomElements.P,
+    },
+    {
+      childCount: 1,
+      type: VirtualDomElements.Strong,
+    },
+    text('Full Changelog'),
+    text(': '),
+    {
+      childCount: 1,
+      href: 'https://example.com/compare/v1...v2',
+      type: VirtualDomElements.A,
+    },
+    text('https://example.com/compare/v1...v2'),
+  ])
+})
+
 test('element with class', () => {
   const html = '<div class="EditorRow"></div>'
   const allowedAttributes = ['className']

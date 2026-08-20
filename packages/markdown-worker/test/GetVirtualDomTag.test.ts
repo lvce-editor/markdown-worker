@@ -26,6 +26,7 @@ test('inline tags', () => {
   expect(GetVirtualDomTag.getVirtualDomTag(ElementTags.Img)).toBe(VirtualDomElements.Img)
   expect(GetVirtualDomTag.getVirtualDomTag(ElementTags.Br)).toBe(VirtualDomElements.Br)
   expect(GetVirtualDomTag.getVirtualDomTag(ElementTags.Abbr)).toBe(VirtualDomElements.Abbr)
+  expect(GetVirtualDomTag.getVirtualDomTag(ElementTags.Strong)).toBe(VirtualDomElements.Strong)
 })
 
 test('list tags', () => {
