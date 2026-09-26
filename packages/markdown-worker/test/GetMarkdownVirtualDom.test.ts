@@ -65,6 +65,40 @@ test('nested elements', () => {
   ])
 })
 
+test('inline code stays in its paragraph', () => {
+  expect(GetMarkdownVirtualDom.getMarkdownVirtualDom('<p>Use <code>main</code>, <code>exports</code>, and <code>require</code>.</p>')).toEqual([
+    {
+      childCount: 1,
+      className: 'Markdown',
+      role: 'document',
+      type: VirtualDomElements.Div,
+    },
+    {
+      childCount: 7,
+      type: VirtualDomElements.P,
+    },
+    text('Use '),
+    {
+      childCount: 1,
+      type: VirtualDomElements.Code,
+    },
+    text('main'),
+    text(', '),
+    {
+      childCount: 1,
+      type: VirtualDomElements.Code,
+    },
+    text('exports'),
+    text(', and '),
+    {
+      childCount: 1,
+      type: VirtualDomElements.Code,
+    },
+    text('require'),
+    text('.'),
+  ])
+})
+
 test('horizontal rule with sibling elements', () => {
   expect(GetMarkdownVirtualDom.getMarkdownVirtualDom('<p>First</p><hr><p>Second</p>')).toEqual([
     {
