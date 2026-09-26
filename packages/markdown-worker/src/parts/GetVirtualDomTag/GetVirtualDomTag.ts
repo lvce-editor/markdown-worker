@@ -8,6 +8,7 @@ const tagMap: Record<string, number> = {
   [ElementTags.Aside]: VirtualDomElements.Aside,
   [ElementTags.Br]: VirtualDomElements.Br,
   [ElementTags.Cite]: VirtualDomElements.Cite,
+  [ElementTags.Code]: VirtualDomElements.Code,
   [ElementTags.Data]: VirtualDomElements.Data,
   [ElementTags.Dd]: VirtualDomElements.Dd,
   [ElementTags.Div]: VirtualDomElements.Div,
