@@ -27,11 +27,13 @@ test('inline tags', () => {
   expect(GetVirtualDomTag.getVirtualDomTag(ElementTags.Br)).toBe(VirtualDomElements.Br)
   expect(GetVirtualDomTag.getVirtualDomTag(ElementTags.Abbr)).toBe(VirtualDomElements.Abbr)
   expect(GetVirtualDomTag.getVirtualDomTag(ElementTags.Strong)).toBe(VirtualDomElements.Strong)
+  expect(GetVirtualDomTag.getVirtualDomTag(ElementTags.Em)).toBe(VirtualDomElements.Em)
   expect(GetVirtualDomTag.getVirtualDomTag(ElementTags.Code)).toBe(VirtualDomElements.Code)
 })
 
 test('list tags', () => {
   expect(GetVirtualDomTag.getVirtualDomTag(ElementTags.Ol)).toBe(VirtualDomElements.Ol)
+  expect(GetVirtualDomTag.getVirtualDomTag(ElementTags.Ul)).toBe(VirtualDomElements.Ul)
   expect(GetVirtualDomTag.getVirtualDomTag(ElementTags.Li)).toBe(VirtualDomElements.Li)
   expect(GetVirtualDomTag.getVirtualDomTag(ElementTags.Dl)).toBe(VirtualDomElements.Dl)
   expect(GetVirtualDomTag.getVirtualDomTag(ElementTags.Dd)).toBe(VirtualDomElements.Dd)
