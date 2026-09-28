@@ -13,6 +13,7 @@ const tagMap: Record<string, number> = {
   [ElementTags.Dd]: VirtualDomElements.Dd,
   [ElementTags.Div]: VirtualDomElements.Div,
   [ElementTags.Dl]: VirtualDomElements.Dl,
+  [ElementTags.Em]: VirtualDomElements.Em,
   [ElementTags.Figcaption]: VirtualDomElements.Figcaption,
   [ElementTags.Figure]: VirtualDomElements.Figure,
   [ElementTags.Footer]: VirtualDomElements.Footer,
@@ -35,6 +36,7 @@ const tagMap: Record<string, number> = {
   [ElementTags.Strong]: VirtualDomElements.Strong,
   [ElementTags.Tfoot]: VirtualDomElements.Tfoot,
   [ElementTags.Time]: VirtualDomElements.Time,
+  [ElementTags.Ul]: VirtualDomElements.Ul,
 }
 
 export const getVirtualDomTag = (text: string): number => {
